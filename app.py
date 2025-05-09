@@ -8,13 +8,11 @@ app = Flask(__name__)
 # --- Ruta para la página inicial con el formulario ---
 @app.route('/')
 def index():
-    # Renderiza el template HTML principal
     return render_template('index.html')
 
 # --- Ruta para manejar la petición POST del formulario ---
 @app.route('/generate_brief', methods=['POST'])
 def generate_brief():
-    # Obtiene la industria del formulario
     industry = request.form.get('industry')
     design_type = request.form.get('design_type')
     if not industry:
@@ -58,10 +56,6 @@ def generate_brief():
     except:
         return "Error al contactar con la IA", 400
 
-
-# --- Para ejecutar la aplicación Flask ---
 if __name__ == '__main__':
-    # debug=True permite recargar automáticamente el servidor al hacer cambios
-    # y muestra mensajes de error detallados
     app.run(debug=True)
 
