@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Brief de Cliente Falso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Opcional: estilos personalizados si Tailwind no es suficiente */
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Generador de Brief de Cliente Falso</h1>
+
+        <form action="/generate_brief" method="post" class="space-y-4">
+            <div>
+                <label for="industry" class="block text-sm font-medium text-gray-700">
+                    ¿De qué industria le gustaría un pedido de cliente?
+                </label>
+                <input
+                    type="text"
+                    id="industry"
+                    name="industry"
+                    required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    placeholder="Ej: Restaurante, Tecnología, Moda, Videojuegos..."
+                >
+            </div>
+
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                <button
+                    type="submit"
+                    name="design_type"
+                    value="personalized"
+                    class="flex-1 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                >
+                    Generar con Diseño Personalizado
+                </button>
+
+                <button
+                    type="submit"
+                    name="design_type"
+                    value="standard"
+                    class="flex-1 flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
+                >
+                    Generar con Diseño Estándar
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

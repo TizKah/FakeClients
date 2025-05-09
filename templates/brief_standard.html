@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brief de Diseño (Estándar)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados para mejorar la legibilidad y el diseño */
+        body {
+            font-family: 'Inter', sans-serif; /* Usar una fuente moderna */
+            line-height: 1.6;
+            color: #333; /* Color de texto principal */
+            background-color: #f8f8f8; /* Fondo ligeramente gris */
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff; /* Fondo blanco para el contenido */
+            padding: 30px;
+            border-radius: 12px; /* Esquinas más redondeadas */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+        }
+        h1 {
+            color: #1a202c; /* Un gris oscuro para el título principal */
+            border-bottom: 2px solid #e2e8f0; /* Línea divisoria sutil */
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.25rem; /* Tamaño de fuente más grande */
+            font-weight: 700; /* Negrita */
+            text-align: center; /* Centrar título */
+        }
+
+        /* Estilos para los títulos de sección fijos */
+        .section-title {
+             color: #2d3748; /* Un gris azulado para los subtítulos */
+             margin-top: 25px;
+             margin-bottom: 15px;
+             border-bottom: 1px solid #ebf4ff; /* Línea más clara */
+             padding-bottom: 8px;
+             font-size: 1.5rem; /* Tamaño de fuente para subtítulos */
+             font-weight: 600; /* Semi-negrita */
+        }
+
+        /* Estilos para el contenido de cada sección */
+        .section-content {
+            margin-bottom: 20px; /* Espacio después de cada sección de contenido */
+            color: #4a5568; /* Gris medio para párrafos */
+        }
+
+        /* Estilos para los elementos generados por Markdown dentro del contenido */
+        .section-content p { margin-bottom: 15px; }
+        .section-content ul { padding-left: 25px; margin-bottom: 15px; list-style: disc; }
+        .section-content ul li { margin-bottom: 8px; }
+        .section-content strong { font-weight: 700; color: #2d3748; }
+
+
+        /* Estilo para la sección del deadline */
+        .deadline-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff0f3; /* Fondo rosa claro */
+            border-left: 5px solid #e53e3e; /* Borde rojo a la izquierda */
+            border-radius: 4px;
+            font-size: 1.1rem;
+            color: #c53030; /* Texto rojo oscuro */
+            font-weight: 600;
+        }
+         /* Estilo específico para el texto del deadline si no viene envuelto */
+         .deadline-section p {
+             margin: 0; /* Eliminar margen inferior extra si es un párrafo */
+             color: #c53030; /* Asegurar color rojo */
+         }
+
+
+        /* Animación simple de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .container {
+             animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Brief de Diseño</h1>
+
+        <h2 class="section-title">Descripción de la compañía</h2>
+        <div class="section-content">
+            {{ company_content | safe }} 
+        </div>
+
+        <h2 class="section-title">Descripción del trabajo a realizar</h2>
+        <div class="section-content">
+            {{ job_content | safe }} 
+        </div>
+
+        <h2 class="section-title">Deadline</h2>
+        <div class="section-content deadline-section">
+             {{ deadline_content | safe }} 
+        </div>
+
+
+    </div>
+</body>
+</html>

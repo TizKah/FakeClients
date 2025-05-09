@@ -1,0 +1,8 @@
+.env
+
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+templates/brief_request.html
