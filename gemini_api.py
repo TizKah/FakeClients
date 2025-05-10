@@ -51,11 +51,18 @@ def get_personalized_prompt(industry, format):
     return final_prompt
 
 def clean_html(response_text):
-    if response_text:
-        response_text = response_text.strip()
-        if response_text.startswith("```html") and response_text.endswith("```"):
-            response_text = response_text[len("```html"):-len("```")].strip()
-    return response_text
+    html_start = "<!DOCTYPE html>"
+    html_end = "</html>"
+
+    index_start = response_text.find(html_start)
+    if not index_start:
+        return None
+    
+    index_end = response_text.find(html_end)
+    if not index_end:
+        return None
+    
+    return response_text[index_start : index_end]
 
 def get_text_response(prompt):
     prompt_data = {
