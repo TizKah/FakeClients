@@ -7,14 +7,14 @@ load_dotenv()
 API_KEY = os.environ.get("GEMINI_API_KEY")
 FASTER_MODEL = "gemini-2.0-flash"
 MODEL = "gemini-2.5-flash-preview-04-17"
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={API_KEY}"
+API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{FASTER_MODEL}:generateContent?key={API_KEY}"
 
 
 class RESPONSE_FORMAT(Enum):
     HTML = 1
     TEXT = 2
 
-def personalize_industry_data(industry, format):
+def get_personalized_prompt(industry, format):
     text_format_request = f"""Quiero que actúes como un trabajador de una empresa en la industria de {industry}. Estás enviando un brief de diseño a tu diseñador gráfico (que soy yo).
 
     Tu respuesta debe ser *únicamente* el brief de diseño, estructurado exactamente en las siguientes secciones:
@@ -47,12 +47,8 @@ def personalize_industry_data(industry, format):
     else:
         html_format_request = ""
 
-    prompt_data = {
-    "contents": [{
-        "parts":[{"text": text_format_request + html_format_request}]
-        }]
-    }
-    return prompt_data
+    final_prompt = text_format_request + html_format_request
+    return final_prompt
 
 def clean_html(response_text):
     response_text = response_text.strip()
@@ -61,34 +57,67 @@ def clean_html(response_text):
         response_text = response_text[len("```html"):-len("```")].strip()
     return response_text
 
-def generate_client_order_html(industry):
+
+def get_text_response(prompt):
+    prompt_data = {
+    "contents": [{
+        "parts":[{"text": prompt}]
+        }]
+    }
     headers = {
         'Content-Type': 'application/json'
     }
+
     gemini_response = requests.post(url=API_URL,
                                     headers=headers,
-                                    json=personalize_industry_data(industry, RESPONSE_FORMAT.HTML))
-
+                                    json=prompt_data)
+    response_text = None
     if gemini_response.status_code == 200:
         gemini_response_data = gemini_response.json()
-        response_text = clean_html(gemini_response_data['candidates'][0]['content']['parts'][0]['text'])
+        response_text = gemini_response_data['candidates'][0]['content']['parts'][0]['text']
+    return response_text
+
+
+def generate_client_order_html(industry):
+    prompt = get_personalized_prompt(industry=industry,
+                                     format=RESPONSE_FORMAT.HTML)
+    response_text = get_text_response(prompt)
+
+    if response_text:
+        response_text = clean_html(response_text)
         filename = "templates/brief_request.html"
         with open(filename, "w") as file:
             file.write(response_text)
     else:
-        print(f"ERROR: {gemini_response.status_code}")
+        print(f"ERROR.\n")
 
 def generate_client_order_text(industry):
+    prompt = get_personalized_prompt(industry=industry,
+                                     format=RESPONSE_FORMAT.TEXT)
+    response_text = get_text_response(prompt)
+    return response_text
+
+""" def call_api(text):
+    prompt_data = {
+    "contents": [{
+        "parts":[{"text": text}]
+        }]
+    }
     headers = {
         'Content-Type': 'application/json'
     }
     gemini_response = requests.post(url=API_URL,
                                     headers=headers,
-                                    json=personalize_industry_data(industry, RESPONSE_FORMAT.TEXT))
+                                    json=prompt_data)
 
     if gemini_response.status_code == 200:
         gemini_response_data = gemini_response.json()
         response_text = gemini_response_data['candidates'][0]['content']['parts'][0]['text']
-        return response_text
-    else:
-        print(f"ERROR: {gemini_response.status_code}")
+        print("\n\n-- RESPUESTA GEMINI --\n\n")
+        print(response_text)
+
+
+text = input("\n")
+while text!='q':
+    call_api(text)
+    text = input("\n") """
