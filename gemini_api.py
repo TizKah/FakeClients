@@ -51,12 +51,11 @@ def get_personalized_prompt(industry, format):
     return final_prompt
 
 def clean_html(response_text):
-    response_text = response_text.strip()
-
-    if response_text.startswith("```html") and response_text.endswith("```"):
-        response_text = response_text[len("```html"):-len("```")].strip()
+    if response_text:
+        response_text = response_text.strip()
+        if response_text.startswith("```html") and response_text.endswith("```"):
+            response_text = response_text[len("```html"):-len("```")].strip()
     return response_text
-
 
 def get_text_response(prompt):
     prompt_data = {
@@ -82,14 +81,7 @@ def generate_client_order_html(industry):
     prompt = get_personalized_prompt(industry=industry,
                                      format=RESPONSE_FORMAT.HTML)
     response_text = get_text_response(prompt)
-
-    if response_text:
-        response_text = clean_html(response_text)
-        filename = "templates/brief_request.html"
-        with open(filename, "w") as file:
-            file.write(response_text)
-    else:
-        print(f"ERROR.\n")
+    return clean_html(response_text)
 
 def generate_client_order_text(industry):
     prompt = get_personalized_prompt(industry=industry,

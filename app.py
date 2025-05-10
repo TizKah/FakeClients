@@ -19,42 +19,48 @@ def generate_brief():
         return "Error: Por favor, especifica una industria.", 400
 
 
-    try:
-        if design_type == "personalized":
-            generate_client_order_html(industry)
-            return render_template("brief_request.html")
-        else:
-            response_text = generate_client_order_text(industry)
-            company_title = 'Descripción de la compañía:'
-            job_title = 'Descripción del trabajo a realizar:'
-            deadline_title = 'Deadline:'
+    if design_type == "personalized":
+        response_html = generate_client_order_html(industry)
+        if not response_html:
+            return "Error interno de la página (contacto con la API de la IA)", 400
+        return response_html
+    
+    elif design_type == "standard":
+        response_text = generate_client_order_text(industry)
+        if not response_text:
+            return "Error interno de la página (contacto con la API de la IA)", 400
+        
+        company_title = 'Descripción de la compañía:'
+        job_title = 'Descripción del trabajo a realizar:'
+        deadline_title = 'Deadline:'
 
-            company_content = ""
-            job_content = ""
-            deadline_content = ""
+        company_content = ""
+        job_content = ""
+        deadline_content = ""
 
-            # Ver luego gestión de errores
-            parts = response_text.split(company_title)
-            remaining_text = parts[1].strip()
-            parts = remaining_text.split(job_title)
-            company_content = parts[0].strip()
-            remaining_text = parts[1].strip()
-            parts = remaining_text.split(deadline_title)
-            job_content = parts[0].strip()
-            deadline_content = parts[1].strip()
+        # Ver luego gestión de errores
+        parts = response_text.split(company_title)
+        remaining_text = parts[1].strip()
+        parts = remaining_text.split(job_title)
+        company_content = parts[0].strip()
+        remaining_text = parts[1].strip()
+        parts = remaining_text.split(deadline_title)
+        job_content = parts[0].strip()
+        deadline_content = parts[1].strip()
 
-            company_content_html = markdown.markdown(company_content)
-            job_content_html = markdown.markdown(job_content)
-            deadline_content_html = markdown.markdown(deadline_content)
+        company_content_html = markdown.markdown(company_content)
+        job_content_html = markdown.markdown(job_content)
+        deadline_content_html = markdown.markdown(deadline_content)
 
-            return render_template(
-                'brief_standard.html',
-                company_content=company_content_html,
-                job_content=job_content_html,
-                deadline_content=deadline_content_html
-            )
-    except:
-        return "Error al contactar con la IA", 400
+        return render_template(
+            'brief_standard.html',
+            company_content=company_content_html,
+            job_content=job_content_html,
+            deadline_content=deadline_content_html
+        )
+    
+    else:
+        return "Estilo de diseño de página erroneo.", 400
 
 if __name__ == '__main__':
     app.run(debug=True)
